@@ -54,7 +54,7 @@
             <column name="stop_time" type="timestamp"/>
             <column name="elapsed_time" type="interval"/>
             <column name="log_cost" type="numeric"/>
-            <column name="log_status" type="text"/>
+            <column name="log_status" type="boolean" defaultValue="false"/>
         </createTable>
 
     </changeSet>
