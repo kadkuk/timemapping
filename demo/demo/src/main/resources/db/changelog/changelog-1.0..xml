@@ -4,11 +4,58 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
-    <changeSet  author="authorName"  id="changelog-1.0">
-        <createTable  tableName="TablesAndTables">
-            <column  name="COLUMN1"  type="TEXT">
-                <constraints  nullable="true"  primaryKey="false"  unique="false"/>
+
+
+    <changeSet  author="Kadri"  id="changelog-1">
+        <createTable tableName="user_data">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
             </column>
+            <column name="first_name" type="text"/>
+            <column name="last_name" type="text"/>
+            <column name="email" type="text">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ak_email"/>
+            </column>
+            <column name="password" type="text"/>
         </createTable>
+
+        <createTable tableName="project">
+            <column name="project_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints foreignKeyName="fk_user_project" references="user_data(user_id)"/>
+            </column>
+            <column name="project_name" type="text"/>
+        </createTable>
+
+        <createTable tableName="activity">
+            <column name="activity_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="project_id" type="int">
+                <constraints foreignKeyName="fk_project_activity" references="project(project_id)"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints foreignKeyName="fk_user_activity" references="user_data(user_id)"/>
+            </column>
+            <column name="activity_name" type="text"/>
+            <column name="activity_hourly_rate" type="numeric"/>
+        </createTable>
+
+        <createTable tableName="time_log">
+            <column name="log_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="activity_id" type="int">
+                <constraints foreignKeyName="fk_activity_time_log" references="activity(activity_id)"/>
+            </column>
+            <column name="start_time" type="timestamp"/>
+            <column name="stop_time" type="timestamp"/>
+            <column name="elapsed_time" type="interval"/>
+            <column name="log_cost" type="numeric"/>
+            <column name="log_status" type="text"/>
+        </createTable>
+
     </changeSet>
 </databaseChangeLog>
