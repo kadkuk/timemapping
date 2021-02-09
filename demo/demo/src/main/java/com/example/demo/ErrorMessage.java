@@ -1,13 +1,13 @@
 package com.example.demo;
 
 public class ErrorMessage {
-    private String errMessage;
+    private String errorMessage;
 
-    public String getErrMessage() {
-        return errMessage;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public void setErrMessage(String errMessage) {
-        this.errMessage = errMessage;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

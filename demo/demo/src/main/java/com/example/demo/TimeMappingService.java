@@ -25,7 +25,9 @@ public class TimeMappingService {
         } catch (DuplicateKeyException e) {
             throw new TimeMappingExceptions("User with this email already exists.");
         } catch (DataIntegrityViolationException e) {
-            throw new TimeMappingExceptions("Email and/or password cannot be empty");
+            throw new TimeMappingExceptions("Email cannot be empty");
+        } catch (IllegalArgumentException e) {
+            throw new TimeMappingExceptions("Password cannot be empty");
         }
     }
 }

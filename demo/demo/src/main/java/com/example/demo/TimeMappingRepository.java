@@ -24,6 +24,13 @@ public class TimeMappingRepository {
         jdbcTemplate.update(sql10, paraMap10);
     }
 
+    public String requestPassword(String email) {
+        String sql11 = "SELECT password FROM user_data WHERE email = :emailParam";
+        HashMap<String, Object> paramap11 = new HashMap<>();
+        paramap11.put("emailParam", email);
+        return jdbcTemplate.queryForObject(sql11, paramap11, String.class);
+    }
+
 
     public void start_log (int logID) {
 
