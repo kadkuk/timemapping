@@ -6,7 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
 
-    <changeSet  author="Kadri"  id="changelog-1">
+    <changeSet author="Kadri" id="changelog-1">
         <createTable tableName="user_data">
             <column name="user_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -16,7 +16,9 @@
             <column name="email" type="text">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ak_email"/>
             </column>
-            <column name="password" type="text"/>
+            <column name="password" type="text">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="project">
