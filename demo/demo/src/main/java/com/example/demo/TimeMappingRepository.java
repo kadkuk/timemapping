@@ -32,7 +32,36 @@ public class TimeMappingRepository {
     }
 
 
-    public void start_log (int logID) {
-
+    public void startLog (int logID) {
+        String sql = "UPDATE time_log SET start_time = current_timestamp WHERE log_id = :logIdParam";
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("logIdParam", logID);
+        jdbcTemplate.update(sql, paramMap);
     }
+
+    public void stopLog (int logID) {
+        String sql = "UPDATE time_log SET stop_time = current_timestamp WHERE log_id = :logIdParam";
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("logIdParam", logID);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+    public boolean getLogStatus (int logID ) {
+        String sql = "SELECT log_status FROM time_log WHERE log_id = :logIdParam";
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("LogIdParam", logID);
+        return jdbcTemplate.queryForObject(sql, paramMap, Boolean.class);
+    }
+
+    public void setLogStatusTrue(int logId) {
+        String sql = "UPDATE time_log SET log_status = :logStatusParam WHERE log_id = :logIdParam";
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("logIdParam", logId);
+        paramMap.put("logStatusParam", true);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+
+
+
 }

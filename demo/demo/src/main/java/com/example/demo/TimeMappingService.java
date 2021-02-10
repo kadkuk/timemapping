@@ -30,4 +30,12 @@ public class TimeMappingService {
             throw new TimeMappingExceptions("Password cannot be empty");
         }
     }
+
+    public void startLog (TimeMappingLog timeMappingLog) {
+        timeMappingRepository.startLog(timeMappingLog.getLogId());
+    }
+
+    public void stopLog (TimeMappingLog timeMappingLog) {
+        timeMappingRepository.stopLog(timeMappingLog.getLogId());
+    }
 }
