@@ -18,12 +18,6 @@ public class TimeMappingController {
     }
 
 
-
-    @PutMapping("/public/stoptime")
-    public void stopLog(@RequestBody TimeMappingLog timeMappingLog) {
-        timeMappingService.stopLog(timeMappingLog);
-    }
-
     @PostMapping("/public/createproject")
     public void createProject(@RequestBody TimeMappingProject timeMappingProject) {
         timeMappingService.createProject(timeMappingProject);
