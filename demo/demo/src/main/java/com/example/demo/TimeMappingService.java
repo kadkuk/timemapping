@@ -42,7 +42,7 @@ public class TimeMappingService {
         } else if (tureValue == 0){
             timeMappingRepository.startLog(activityId);
         } else {
-            throw new TimeMappingExceptions("Something went wrong.");
+            throw new TimeMappingExceptions("User ID does not exist.");
         }
         }
 
@@ -66,12 +66,12 @@ public class TimeMappingService {
     }
 
 
-    public List<ActivityHoursCosts> activityHoursCosts(String activityName) {
-        List <ActivityHoursCosts> newList = timeMappingRepository.activityHourlyCosts(activityName);
+    public List<ActivityHoursCosts> activityHoursCosts(String activityName, int userId) {
+        List <ActivityHoursCosts> newList = timeMappingRepository.activityHourlyCosts(activityName, userId);
         if (newList.isEmpty()) {
             throw new TimeMappingExceptions("Activity not found.");
         } else {
-            return timeMappingRepository.activityHourlyCosts(activityName);
+            return timeMappingRepository.activityHourlyCosts(activityName, userId);
         }
     }
 }

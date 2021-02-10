@@ -10,6 +10,15 @@ public class ActivityHoursCosts {
     private LocalDateTime stopTime;
     private Double hours;
     private BigDecimal cost;
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public String getActivityName() {
         return activityName;
