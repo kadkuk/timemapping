@@ -31,8 +31,16 @@ public class TimeMappingService {
         }
     }
 
-    public void createProject(TimeMappingProject timeMappingCreateProject) {
-       timeMappingRepository.createProject(timeMappingCreateProject.getProjectId(), timeMappingCreateProject.getUserId(), timeMappingCreateProject.getProjectName());
+    public void createProject(TimeMappingProject timeMappingProject) {
+       timeMappingRepository.createProject(timeMappingProject.getUserId(),
+               timeMappingProject.getProjectName());
+    }
+
+    public void createActivity(TimeMappingActivity timeMappingActivity) {
+        timeMappingRepository.createActivity(timeMappingActivity.getProjectId(),
+                timeMappingActivity.getUserId(),
+                timeMappingActivity.getActivityName(),
+                timeMappingActivity.getActivityHourlyRate());
     }
 
     public void startLog (TimeMappingLog timeMappingLog) {
