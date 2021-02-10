@@ -1,10 +1,9 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class TimeMappingController {
@@ -28,5 +27,9 @@ public class TimeMappingController {
         timeMappingService.createActivity(timeMappingActivity);
     }
 
+    @GetMapping("public/data")
+    public List<ActivityHoursCosts> activitySummary(@RequestParam("activityName") String activityName, @RequestParam("userId") int userId) {
+        return timeMappingService.activityHoursCosts(activityName, userId);
+    }
 
 }

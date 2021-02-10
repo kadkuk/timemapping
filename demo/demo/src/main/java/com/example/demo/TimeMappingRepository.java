@@ -90,10 +90,11 @@ public class TimeMappingRepository {
         return jdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
-    public List<ActivityHoursCosts> activityHourlyCosts (String activityName) {
-        String sql16 = "SELECT activity.activity_name, SUM(EXTRACT(epoch from (time_log.elapsed_time)))/60/60 AS hours, (SUM(EXTRACT(epoch from (time_log.elapsed_time)))/60/60)*activity.activity_hourly_rate AS cost FROM activity, time_log WHERE activity.activity_id = time_log.activity_id AND activity.activity_name= :nameParam GROUP BY activity_name, activity_hourly_rate;";
+    public List<ActivityHoursCosts> activityHourlyCosts (String activityName, int userID) {
+        String sql16 = "SELECT activity.activity_name, SUM(EXTRACT(epoch from (time_log.elapsed_time)))/60/60 AS hours, (SUM(EXTRACT(epoch from (time_log.elapsed_time)))/60/60)*activity.activity_hourly_rate AS cost FROM activity, time_log WHERE activity.activity_id = time_log.activity_id AND activity.activity_name= :nameParam AND activity.user_id = :idParam GROUP BY activity_name, activity_hourly_rate;";
         HashMap<String, Object> paraMap16 = new HashMap<>();
         paraMap16.put("nameParam", activityName);
+        paraMap16.put("idParam", userID);
         List<ActivityHoursCosts> result = jdbcTemplate.query(sql16, paraMap16, new ActivityHoursCostsRowMapper());
         return result;
     }
