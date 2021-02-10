@@ -24,6 +24,15 @@ public class TimeMappingRepository {
         jdbcTemplate.update(sql10, paraMap10);
     }
 
+    public void createProject(int projectId, int userId, String projectName){
+        String sql = "INSERT INTO project (project_id, user_id, project_name) VALUES (:projectIdParam, :userIdParam, :projectNameParam)";
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("projectIdParam", projectId);
+        paramMap.put("userIdParam", userId);
+        paramMap.put("projectNameParam", projectName);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
     public String requestPassword(String email) {
         String sql11 = "SELECT password FROM user_data WHERE email = :emailParam";
         HashMap<String, Object> paramap11 = new HashMap<>();
