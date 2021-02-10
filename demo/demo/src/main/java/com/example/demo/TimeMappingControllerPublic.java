@@ -24,7 +24,7 @@ public class TimeMappingControllerPublic {
 
     //http://localhost:8080/public/createuser
     @PostMapping ("/public/createuser")
-    public String createUser(@RequestBody User user) {
+    public String createUser(@RequestBody TimeMappingUser user) {
         return timeMappingService.createUser(user);
     }
 

@@ -18,7 +18,7 @@ public class TimeMappingService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public String createUser(User user) {
+    public String createUser(TimeMappingUser user) {
         try {
             timeMappingRepository.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), passwordEncoder.encode(user.getPassword()));
             return "User created!";
