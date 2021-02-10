@@ -31,6 +31,10 @@ public class TimeMappingService {
         }
     }
 
+    public void createProject(TimeMappingProject timeMappingCreateProject) {
+       timeMappingRepository.createProject(timeMappingCreateProject.getProjectId(), timeMappingCreateProject.getUserId(), timeMappingCreateProject.getProjectName());
+    }
+
     public void startLog (TimeMappingLog timeMappingLog) {
         timeMappingRepository.startLog(timeMappingLog.getLogId());
     }
