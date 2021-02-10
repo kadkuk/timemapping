@@ -38,10 +38,20 @@ public class TimeMappingRepository {
         jdbcTemplate.update(sql, paramMap);
     }
 
-    public void createActivity(int projectId, int userId, String activityName, int activityHourlyRate) {
+    public void createProjectActivity(int projectId, int userId, String activityName, int activityHourlyRate) {
         String sql = "INSERT INTO activity (project_id, user_id, activity_name, activity_hourly_rate) VALUES (:projectIdParam, :userIdParam, :activityNameParam, :activityHourlyRateParam)";
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("projectIdParam", projectId);
+        paramMap.put("userIdParam", userId);
+        paramMap.put("activityNameParam", activityName);
+        paramMap.put("activityHourlyRateParam", activityHourlyRate);
+        jdbcTemplate.update(sql, paramMap);
+
+    }
+
+    public void createIndependentActivity(int userId, String activityName, int activityHourlyRate) {
+        String sql = "INSERT INTO activity (user_id, activity_name, activity_hourly_rate) VALUES (:userIdParam, :activityNameParam, :activityHourlyRateParam)";
+        HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("userIdParam", userId);
         paramMap.put("activityNameParam", activityName);
         paramMap.put("activityHourlyRateParam", activityHourlyRate);

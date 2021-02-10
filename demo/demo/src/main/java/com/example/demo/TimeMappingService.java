@@ -52,10 +52,17 @@ public class TimeMappingService {
     }
 
     public void createActivity(TimeMappingActivity timeMappingActivity) {
-        timeMappingRepository.createActivity(timeMappingActivity.getProjectId(),
-                timeMappingActivity.getUserId(),
-                timeMappingActivity.getActivityName(),
-                timeMappingActivity.getActivityHourlyRate());
+        if (timeMappingActivity.getProjectId() == 0) {
+            timeMappingRepository.createIndependentActivity(timeMappingActivity.getUserId(),
+                    timeMappingActivity.getActivityName(),
+                    timeMappingActivity.getActivityHourlyRate());
+        }else {
+            timeMappingRepository.createProjectActivity(timeMappingActivity.getProjectId(),
+                    timeMappingActivity.getUserId(),
+                    timeMappingActivity.getActivityName(),
+                    timeMappingActivity.getActivityHourlyRate());
+        }
+
     }
 
 
