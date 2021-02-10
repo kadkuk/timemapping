@@ -1,6 +1,6 @@
 package com.example.demo;
 
-public class User {
+public class TimeMappingUser {
     private int userId;
     private String firstName;
     private String lastName;

@@ -30,6 +30,26 @@ public class TimeMappingRepository {
         jdbcTemplate.update(sql10, paraMap10);
     }
 
+    public void createProject(int userId, String projectName){
+        String sql = "INSERT INTO project (user_id, project_name) VALUES (:userIdParam, :projectNameParam)";
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("userIdParam", userId);
+        paramMap.put("projectNameParam", projectName);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+    public void createActivity(int projectId, int userId, String activityName, int activityHourlyRate) {
+        String sql = "INSERT INTO activity (project_id, user_id, activity_name, activity_hourly_rate) VALUES (:projectIdParam, :userIdParam, :activityNameParam, :activityHourlyRateParam)";
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("projectIdParam", projectId);
+        paramMap.put("userIdParam", userId);
+        paramMap.put("activityNameParam", activityName);
+        paramMap.put("activityHourlyRateParam", activityHourlyRate);
+        jdbcTemplate.update(sql, paramMap);
+
+    }
+
+
     public String requestPassword(String email) {
         String sql11 = "SELECT password FROM user_data WHERE email = :emailParam";
         HashMap<String, Object> paramap11 = new HashMap<>();
@@ -79,6 +99,7 @@ public class TimeMappingRepository {
     }
 
 
+
     private class ActivityHoursCostsRowMapper implements RowMapper<ActivityHoursCosts> {
         @Override
         public ActivityHoursCosts mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -89,5 +110,6 @@ public class TimeMappingRepository {
             return activityHoursCosts;
         }
     }
+
 
 }

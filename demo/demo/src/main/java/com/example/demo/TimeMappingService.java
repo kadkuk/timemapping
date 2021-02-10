@@ -20,7 +20,7 @@ public class TimeMappingService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public String createUser(User user) {
+    public String createUser(TimeMappingUser user) {
         try {
             timeMappingRepository.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), passwordEncoder.encode(user.getPassword()));
             return "User created!";
@@ -33,6 +33,7 @@ public class TimeMappingService {
         }
     }
 
+
     public void activityLog (TimeMappingLog timeMappingLog) {
         int activityId = timeMappingRepository.requestActivityId(timeMappingLog.getActivityName(), timeMappingLog.getUserID());
         int tureValue = timeMappingRepository.getLogStatus(timeMappingLog.getActivityName(), timeMappingLog.getUserID());
@@ -44,6 +45,23 @@ public class TimeMappingService {
             throw new TimeMappingExceptions("Something went wrong.");
         }
         }
+
+    public void createProject(TimeMappingProject timeMappingProject) {
+       timeMappingRepository.createProject(timeMappingProject.getUserId(),
+               timeMappingProject.getProjectName());
+    }
+
+    public void createActivity(TimeMappingActivity timeMappingActivity) {
+        timeMappingRepository.createActivity(timeMappingActivity.getProjectId(),
+                timeMappingActivity.getUserId(),
+                timeMappingActivity.getActivityName(),
+                timeMappingActivity.getActivityHourlyRate());
+    }
+
+    public void startLog (TimeMappingLog timeMappingLog) {
+        timeMappingRepository.startLog(timeMappingLog.getLogId());
+    }
+
 
 
 
