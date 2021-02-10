@@ -58,12 +58,6 @@ public class TimeMappingService {
                 timeMappingActivity.getActivityHourlyRate());
     }
 
-    public void startLog (TimeMappingLog timeMappingLog) {
-        timeMappingRepository.startLog(timeMappingLog.getLogId());
-    }
-
-
-
 
     public List<ActivityHoursCosts> activityHoursCosts(String activityName) {
         List <ActivityHoursCosts> newList = timeMappingRepository.activityHourlyCosts(activityName);
