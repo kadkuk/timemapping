@@ -7,6 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 public class TimeMappingService {
@@ -31,11 +33,26 @@ public class TimeMappingService {
         }
     }
 
-    public void startLog (TimeMappingLog timeMappingLog) {
-        timeMappingRepository.startLog(timeMappingLog.getLogId());
-    }
+    public void activityLog (TimeMappingLog timeMappingLog) {
+        int activityId = timeMappingRepository.requestActivityId(timeMappingLog.getActivityName(), timeMappingLog.getUserID());
+        int tureValue = timeMappingRepository.getLogStatus(timeMappingLog.getActivityName(), timeMappingLog.getUserID());
+        if (tureValue > 0) {
+            timeMappingRepository.stopLog(timeMappingLog.getActivityName(), timeMappingLog.getUserID());
+        } else if (tureValue == 0){
+            timeMappingRepository.startLog(activityId);
+        } else {
+            throw new TimeMappingExceptions("Something went wrong.");
+        }
+        }
 
-    public void stopLog (TimeMappingLog timeMappingLog) {
-        timeMappingRepository.stopLog(timeMappingLog.getLogId());
+
+
+    public List<ActivityHoursCosts> activityHoursCosts(String activityName) {
+        List <ActivityHoursCosts> newList = timeMappingRepository.activityHourlyCosts(activityName);
+        if (newList.isEmpty()) {
+            throw new TimeMappingExceptions("Activity not found.");
+        } else {
+            return timeMappingRepository.activityHourlyCosts(activityName);
+        }
     }
 }

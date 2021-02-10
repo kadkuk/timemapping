@@ -11,14 +11,8 @@ public class TimeMappingController {
     @Autowired
     private TimeMappingService timeMappingService;
 
-    @PutMapping("/public/starttime")
-    public void startLog(@RequestBody TimeMappingLog timeMappingLog) {
-        timeMappingService.startLog(timeMappingLog);
+    @PutMapping("/public/activity")
+    public void activityLog(@RequestBody TimeMappingLog timeMappingLog) {
+        timeMappingService.activityLog(timeMappingLog);
     }
-
-    @PutMapping("/public/stoptime")
-    public void stopLog(@RequestBody TimeMappingLog timeMappingLog) {
-        timeMappingService.stopLog(timeMappingLog);
-    }
-
 }

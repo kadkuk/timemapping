@@ -12,6 +12,8 @@ public class TimeMappingLog {
     private Duration elapsedTime;
     private BigDecimal logCost;
     private boolean logStatus;
+    private String activityName;
+    private int userID;
 
     public int getLogId() {
         return logId;
@@ -67,5 +69,21 @@ public class TimeMappingLog {
 
     public void setLogStatus(boolean logStatus) {
         this.logStatus = logStatus;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 }
