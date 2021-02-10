@@ -27,5 +27,9 @@ public class TimeMappingController {
         timeMappingService.createProject(timeMappingProject);
     }
 
+    @PostMapping("/public/createactivity")
+    public void createActivity(@RequestBody TimeMappingActivity timeMappingActivity) {
+        timeMappingService.createActivity(timeMappingActivity);
+    }
 
 }
