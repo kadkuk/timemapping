@@ -1,8 +1,8 @@
-package com.example.demo;
+package com.example.demo.javaClasses;
 
 public class TimeMappingActivity {
     private int activityId;
-    private int projectId;
+    private String projectName;
     private int userId;
     private String activityName;
     private int activityHourlyRate;
@@ -15,12 +15,12 @@ public class TimeMappingActivity {
         this.activityId = activityId;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public int getUserId() {

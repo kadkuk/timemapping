@@ -60,4 +60,15 @@
         </createTable>
 
     </changeSet>
+    <changeSet id="changelog-3" author="Kadri">
+        <sql>
+            CREATE UNIQUE INDEX user_activity ON activity (user_id, activity_name) WHERE project_id IS NULL;
+            CREATE UNIQUE INDEX project__user_activity ON activity (project_id, user_id, activity_name) WHERE project_id IS NOT NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="changelog-4" author="Kadri">
+        <addUniqueConstraint tableName="project" columnNames="user_id, project_name"/>
+    </changeSet>
+    
 </databaseChangeLog>

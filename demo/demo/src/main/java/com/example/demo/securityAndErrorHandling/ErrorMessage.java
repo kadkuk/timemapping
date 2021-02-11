@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.securityAndErrorHandling;
 
 public class ErrorMessage {
     private String errorMessage;

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.javaClasses;
 
 public class TimeMappingUser {
     private int userId;

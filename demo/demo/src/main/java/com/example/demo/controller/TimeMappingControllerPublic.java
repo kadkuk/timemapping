@@ -1,5 +1,10 @@
-package com.example.demo;
+package com.example.demo.controller;
 
+import com.example.demo.javaClasses.TimeMappingUser;
+import com.example.demo.repository.TimeMappingRepository;
+import com.example.demo.securityAndErrorHandling.Login;
+import com.example.demo.securityAndErrorHandling.TimeMappingExceptions;
+import com.example.demo.service.TimeMappingService;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
