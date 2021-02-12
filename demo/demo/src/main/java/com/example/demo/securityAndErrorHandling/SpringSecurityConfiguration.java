@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.securityAndErrorHandling;
 
+import com.example.demo.securityAndErrorHandling.JwtTokenFiler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
