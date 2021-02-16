@@ -1,5 +1,6 @@
 package com.example.demo.securityAndErrorHandling;
 
+import com.example.demo.javaClasses.MyUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,21 +19,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JwtTokenFiler extends  GenericFilterBean {
+public class JwtTokenFiler extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        String token = resolveToken((HttpServletRequest)request);
+        String token = resolveToken((HttpServletRequest) request);
         if (token != null) {
-            Authentication authentication = validateToken(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                Authentication authentication = validateToken(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (Exception e) {
+            }
         }
         filterChain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
-        if(header == null) {
+        if (header == null) {
             return null;
         }
         if (header.startsWith("Bearer")) {
@@ -45,7 +49,7 @@ public class JwtTokenFiler extends  GenericFilterBean {
         Claims claims = Jwts.parser().setSigningKey("c2VjcmV0").parseClaimsJws(token).getBody();
         List<GrantedAuthority> authoritiesList = new ArrayList<>();
         authoritiesList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        UserDetails userDetails = new User((String) claims.get("userName"),"",authoritiesList);
+        UserDetails userDetails = new MyUserDetails((String) claims.get("userName"), (Integer) claims.get("userId"), "", authoritiesList);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }
