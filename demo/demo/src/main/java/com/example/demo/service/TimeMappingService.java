@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,28 +40,26 @@ public class TimeMappingService {
         }
     }
 
-    public String createProject(TimeMappingProject timeMappingProject) {
+    public String createProject(TimeMappingProject timeMappingProject, Integer id) {
         try {
-            int userId = timeMappingRepository.requestUserId(timeMappingProject.getUserId());
-            timeMappingRepository.createProject(userId, timeMappingProject.getProjectName());
+            timeMappingRepository.createProject(id, timeMappingProject.getProjectName());
             return "Project created.";
         } catch (DuplicateKeyException e) {
             throw new TimeMappingExceptions("User with this project already exists.");
         } catch (EmptyResultDataAccessException e) {
-            throw new TimeMappingExceptions("User does not exist. Please create your user.");
+            throw new TimeMappingExceptions("User does not exist. Please create your user and login.");
         }
     }
 
-    public String createActivity(TimeMappingActivity timeMappingActivity) {
+    public String createActivity(TimeMappingActivity timeMappingActivity, Integer id) {
         try {
-            int userId = timeMappingRepository.requestUserId(timeMappingActivity.getUserId());
-            if (timeMappingActivity.getProjectName() == null) {
-                timeMappingRepository.createIndependentActivity(userId,
+            if (timeMappingActivity.getProjectName() == null || timeMappingActivity.getProjectName().equals("")) {
+                timeMappingRepository.createIndependentActivity(id,
                         timeMappingActivity.getActivityName(),
                         timeMappingActivity.getActivityHourlyRate());
             } else {
                 int projectId = timeMappingRepository.requestProjectId(timeMappingActivity.getProjectName());
-                timeMappingRepository.createProjectActivity(projectId, userId,
+                timeMappingRepository.createProjectActivity(projectId, id,
                         timeMappingActivity.getActivityName(),
                         timeMappingActivity.getActivityHourlyRate());
             }
@@ -70,18 +69,19 @@ public class TimeMappingService {
         } catch (DataIntegrityViolationException e) {
             throw new TimeMappingExceptions("Project ID not found.");
         } catch (EmptyResultDataAccessException e) {
-            throw new TimeMappingExceptions("User ID not found.");
+            e.printStackTrace();
+            throw new TimeMappingExceptions("User not found. Please create your user and login.");
         }
     }
 
-    public Boolean toggleActivity(TimeMappingLog timeMappingLog) {
+    public Boolean toggleActivity(TimeMappingLog timeMappingLog, Integer id) {
         try {
-            if (timeMappingLog.getProjectName() == null) {
+            if (timeMappingLog.getProjectName() == null || timeMappingLog.getProjectName().equals("")) {
                 int activityId = timeMappingRepository.requestActivityId(timeMappingLog.getActivityName(),
-                        timeMappingLog.getUserId());
-                int tureValue = timeMappingRepository.getLogStatus(activityId, timeMappingLog.getUserId());
+                        id);
+                int tureValue = timeMappingRepository.getLogStatus(activityId, id);
                 if (tureValue > 0) {
-                    timeMappingRepository.stopLog(activityId, timeMappingLog.getUserId());
+                    timeMappingRepository.stopLog(activityId, id);
                     return false;
                 } else {
                     timeMappingRepository.startLog(activityId);
@@ -89,10 +89,10 @@ public class TimeMappingService {
                 }
             } else {
                 int activityId = timeMappingRepository.requestProjectActivityId(timeMappingLog.getActivityName(),
-                        timeMappingLog.getProjectName(), timeMappingLog.getUserId());
-                int tureValue = timeMappingRepository.getLogStatus(activityId, timeMappingLog.getUserId());
+                        timeMappingLog.getProjectName(), id);
+                int tureValue = timeMappingRepository.getLogStatus(activityId, id);
                 if (tureValue > 0) {
-                    timeMappingRepository.stopLog(activityId, timeMappingLog.getUserId());
+                    timeMappingRepository.stopLog(activityId, id);
                     return false;
                 } else {
                     timeMappingRepository.startLog(activityId);
@@ -100,7 +100,7 @@ public class TimeMappingService {
                 }
             }
         } catch (EmptyResultDataAccessException e) {
-            throw new TimeMappingExceptions("Activity (or Project) name or user ID not found.");
+            throw new TimeMappingExceptions("Activity or project not found.");
         }
     }
 

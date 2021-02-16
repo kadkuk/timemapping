@@ -38,13 +38,14 @@ public class TimeMappingControllerPublic {
     public String login(@RequestBody Login login) {
         if (validate(login)) {
             Date now = new Date();
-            Date expired = new Date(now.getTime() + 1000 * 60 * 60); //token valid 1h
+            Date expired = new Date(now.getTime() + 1000 * 60 * 60 * 24); //token valid 1h
             JwtBuilder builder = Jwts.builder()
                     .setExpiration(expired)
                     .setIssuedAt(new Date())
                     .setIssuer("vali-it")
                     .signWith(SignatureAlgorithm.HS256, "c2VjcmV0")
-                    .claim("userName", login.getEmail());
+                    .claim("userName", login.getEmail())
+                    .claim("userId",timeMappingRepository.getUserId(login.getEmail()));
             return builder.compact();
         } else {
             throw new TimeMappingExceptions("Username or password not found.");

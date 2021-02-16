@@ -1,18 +1,18 @@
 package com.example.demo.javaClasses;
 
-public class TimeMappingActivity {
-    private int activityId;
-    private String projectName;
-    private int userId;
-    private String activityName;
-    private int activityHourlyRate;
+import java.math.BigDecimal;
 
-    public int getActivityId() {
-        return activityId;
+public class TimeMappingActivity {
+    private String projectName;
+    private String activityName;
+    private BigDecimal activityHourlyRate;
+
+    public BigDecimal getActivityHourlyRate() {
+        return activityHourlyRate;
     }
 
-    public void setActivityId(int activityId) {
-        this.activityId = activityId;
+    public void setActivityHourlyRate(BigDecimal activityHourlyRate) {
+        this.activityHourlyRate = activityHourlyRate;
     }
 
     public String getProjectName() {
@@ -23,13 +23,6 @@ public class TimeMappingActivity {
         this.projectName = projectName;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public String getActivityName() {
         return activityName;
@@ -37,13 +30,5 @@ public class TimeMappingActivity {
 
     public void setActivityName(String activityName) {
         this.activityName = activityName;
-    }
-
-    public int getActivityHourlyRate() {
-        return activityHourlyRate;
-    }
-
-    public void setActivityHourlyRate(int activityHourlyRate) {
-        this.activityHourlyRate = activityHourlyRate;
     }
 }

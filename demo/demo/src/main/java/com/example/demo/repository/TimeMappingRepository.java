@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -39,11 +40,11 @@ public class TimeMappingRepository {
         return jdbcTemplate.queryForObject(sql11, paramap11, String.class);
     }
 
-    public int requestUserId(int userId) {
-        String sql17 = "SELECT user_id FROM user_data WHERE user_id = :idParam";
-        HashMap<String, Object> paramap17 = new HashMap<>();
-        paramap17.put("idParam", userId);
-        return jdbcTemplate.queryForObject(sql17, paramap17, Integer.class);
+    public int getUserId(String email) {
+        String sql19 = "SELECT user_id FROM user_data WHERE email = :emailParam";
+        HashMap<String, Object> paramap19 = new HashMap<>();
+        paramap19.put("emailParam", email);
+        return jdbcTemplate.queryForObject(sql19, paramap19, Integer.class);
     }
 
     public int requestProjectId(String projectName) {
@@ -80,7 +81,7 @@ public class TimeMappingRepository {
         jdbcTemplate.update(sql, paramMap);
     }
 
-    public void createProjectActivity(int projectId, int userId, String activityName, int activityHourlyRate) {
+    public void createProjectActivity(int projectId, int userId, String activityName, BigDecimal activityHourlyRate) {
         String sql = "INSERT INTO activity (project_id, user_id, activity_name, activity_hourly_rate) VALUES " +
                 "(:projectIdParam, :userIdParam, :activityNameParam, :activityHourlyRateParam)";
         HashMap<String, Object> paramMap = new HashMap<>();
@@ -91,7 +92,7 @@ public class TimeMappingRepository {
         jdbcTemplate.update(sql, paramMap);
     }
 
-    public void createIndependentActivity(int userId, String activityName, int activityHourlyRate) {
+    public void createIndependentActivity(int userId, String activityName, BigDecimal activityHourlyRate) {
         String sql = "INSERT INTO activity (user_id, activity_name, activity_hourly_rate) VALUES " +
                 "(:userIdParam, :activityNameParam, :activityHourlyRateParam)";
         HashMap<String, Object> paramMap = new HashMap<>();
