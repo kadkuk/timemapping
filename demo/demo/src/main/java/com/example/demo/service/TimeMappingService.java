@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 
 @Service
@@ -42,7 +43,7 @@ public class TimeMappingService {
 
     public String createProject(TimeMappingProject timeMappingProject, Integer id) {
         try {
-            timeMappingRepository.createProject(id, timeMappingProject.getProjectName());
+            timeMappingRepository.createProject(id, timeMappingProject.getProjectName().toLowerCase(Locale.ROOT));
             return "Project created.";
         } catch (DuplicateKeyException e) {
             throw new TimeMappingExceptions("User with this project already exists.");
@@ -55,12 +56,12 @@ public class TimeMappingService {
         try {
             if (timeMappingActivity.getProjectName() == null || timeMappingActivity.getProjectName().equals("")) {
                 timeMappingRepository.createIndependentActivity(id,
-                        timeMappingActivity.getActivityName(),
+                        timeMappingActivity.getActivityName().toLowerCase(Locale.ROOT),
                         timeMappingActivity.getActivityHourlyRate());
             } else {
-                int projectId = timeMappingRepository.requestProjectId(timeMappingActivity.getProjectName());
+                int projectId = timeMappingRepository.requestProjectId(timeMappingActivity.getProjectName().toLowerCase(Locale.ROOT));
                 timeMappingRepository.createProjectActivity(projectId, id,
-                        timeMappingActivity.getActivityName(),
+                        timeMappingActivity.getActivityName().toLowerCase(Locale.ROOT),
                         timeMappingActivity.getActivityHourlyRate());
             }
             return "Activity created";
@@ -77,7 +78,7 @@ public class TimeMappingService {
     public Boolean toggleActivity(TimeMappingLog timeMappingLog, Integer id) {
         try {
             if (timeMappingLog.getProjectName() == null || timeMappingLog.getProjectName().equals("")) {
-                int activityId = timeMappingRepository.requestActivityId(timeMappingLog.getActivityName(),
+                int activityId = timeMappingRepository.requestActivityId(timeMappingLog.getActivityName().toLowerCase(Locale.ROOT),
                         id);
                 int tureValue = timeMappingRepository.getLogStatus(activityId, id);
                 if (tureValue > 0) {
@@ -88,8 +89,8 @@ public class TimeMappingService {
                     return true;
                 }
             } else {
-                int activityId = timeMappingRepository.requestProjectActivityId(timeMappingLog.getActivityName(),
-                        timeMappingLog.getProjectName(), id);
+                int activityId = timeMappingRepository.requestProjectActivityId(timeMappingLog.getActivityName().toLowerCase(Locale.ROOT),
+                        timeMappingLog.getProjectName().toLowerCase(Locale.ROOT), id);
                 int tureValue = timeMappingRepository.getLogStatus(activityId, id);
                 if (tureValue > 0) {
                     timeMappingRepository.stopLog(activityId, id);
@@ -108,21 +109,21 @@ public class TimeMappingService {
                                                        int userId,
                                                        LocalDate startTime,
                                                        LocalDate stopTime) {
-        List<DataSingleActivity> newList = timeMappingRepository.dataSingleActivity(activityName,
+        List<DataSingleActivity> newList = timeMappingRepository.dataSingleActivity(activityName.toLowerCase(Locale.ROOT),
                 userId, startTime, stopTime);
         if (newList.isEmpty()) {
             throw new TimeMappingExceptions("Data not found.");
         } else {
-            return timeMappingRepository.dataSingleActivity(activityName, userId, startTime, stopTime);
+            return timeMappingRepository.dataSingleActivity(activityName.toLowerCase(Locale.ROOT), userId, startTime, stopTime);
         }
     }
 
     public List<DataProject> dataProject(String projectName, int userId, LocalDate startTime, LocalDate stopTime) {
-        List<DataProject> newList = timeMappingRepository.dataProject(projectName, userId, startTime, stopTime);
+        List<DataProject> newList = timeMappingRepository.dataProject(projectName.toLowerCase(Locale.ROOT), userId, startTime, stopTime);
         if (newList.isEmpty()) {
             throw new TimeMappingExceptions("Data not found.");
         } else {
-            return timeMappingRepository.dataProject(projectName, userId, startTime, stopTime);
+            return timeMappingRepository.dataProject(projectName.toLowerCase(Locale.ROOT), userId, startTime, stopTime);
         }
     }
 }
