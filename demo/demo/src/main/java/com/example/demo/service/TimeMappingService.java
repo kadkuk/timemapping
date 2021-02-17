@@ -29,9 +29,13 @@ public class TimeMappingService {
     @Transactional
     public String createUser(TimeMappingUser user) {
         try {
-            timeMappingRepository.createUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                    passwordEncoder.encode(user.getPassword()));
-            return "User created!";
+            if (user.getEmail().equals("") && user.getPassword().equals("")) {
+                throw new TimeMappingExceptions("Email and password cannot be empty");
+            } else {
+                timeMappingRepository.createUser(user.getFirstName(), user.getLastName(), user.getEmail(),
+                        passwordEncoder.encode(user.getPassword()));
+                return "User created!";
+            }
         } catch (DuplicateKeyException e) {
             throw new TimeMappingExceptions("User with this email already exists.");
         } catch (DataIntegrityViolationException e) {
@@ -43,8 +47,12 @@ public class TimeMappingService {
 
     public String createProject(TimeMappingProject timeMappingProject, Integer id) {
         try {
-            timeMappingRepository.createProject(id, timeMappingProject.getProjectName().toLowerCase(Locale.ROOT));
-            return "Project created.";
+            if (timeMappingProject.getProjectName().equals("")) {
+                throw new TimeMappingExceptions("Please insert project name.");
+            } else {
+                timeMappingRepository.createProject(id, timeMappingProject.getProjectName().toLowerCase(Locale.ROOT));
+                return "Project created.";
+            }
         } catch (DuplicateKeyException e) {
             throw new TimeMappingExceptions("User with this project already exists.");
         } catch (EmptyResultDataAccessException e) {
@@ -55,14 +63,22 @@ public class TimeMappingService {
     public String createActivity(TimeMappingActivity timeMappingActivity, Integer id) {
         try {
             if (timeMappingActivity.getProjectName() == null || timeMappingActivity.getProjectName().equals("")) {
-                timeMappingRepository.createIndependentActivity(id,
-                        timeMappingActivity.getActivityName().toLowerCase(Locale.ROOT),
-                        timeMappingActivity.getActivityHourlyRate());
+                if (timeMappingActivity.getActivityName().equals("")) {
+                    throw new TimeMappingExceptions("Please insert activity name.");
+                } else {
+                    timeMappingRepository.createIndependentActivity(id,
+                            timeMappingActivity.getActivityName().toLowerCase(Locale.ROOT),
+                            timeMappingActivity.getActivityHourlyRate());
+                }
             } else {
-                int projectId = timeMappingRepository.requestProjectId(timeMappingActivity.getProjectName().toLowerCase(Locale.ROOT));
-                timeMappingRepository.createProjectActivity(projectId, id,
-                        timeMappingActivity.getActivityName().toLowerCase(Locale.ROOT),
-                        timeMappingActivity.getActivityHourlyRate());
+                if (timeMappingActivity.getActivityName().equals("")) {
+                    throw new TimeMappingExceptions("Please insert activity name.");
+                } else {
+                    int projectId = timeMappingRepository.requestProjectId(timeMappingActivity.getProjectName().toLowerCase(Locale.ROOT));
+                    timeMappingRepository.createProjectActivity(projectId, id,
+                            timeMappingActivity.getActivityName().toLowerCase(Locale.ROOT),
+                            timeMappingActivity.getActivityHourlyRate());
+                }
             }
             return "Activity created";
         } catch (DuplicateKeyException e) {
