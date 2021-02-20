@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.Locale;
 
 @RestController
 public class TimeMappingControllerPublic {
@@ -42,14 +43,14 @@ public class TimeMappingControllerPublic {
         } else {
             if (validate(login)) {
                 Date now = new Date();
-                Date expired = new Date(now.getTime() + 1000 * 60 * 60 * 24); //token valid 1h
+                Date expired = new Date(now.getTime() + 1000 * 60 * 60 * 24); //token valid 24h
                 JwtBuilder builder = Jwts.builder()
                         .setExpiration(expired)
                         .setIssuedAt(new Date())
                         .setIssuer("vali-it")
                         .signWith(SignatureAlgorithm.HS256, "c2VjcmV0")
-                        .claim("userName", login.getEmail())
-                        .claim("userId", timeMappingRepository.getUserId(login.getEmail()));
+                        .claim("userName", login.getEmail().toLowerCase(Locale.ROOT))
+                        .claim("userId", timeMappingRepository.getUserId(login.getEmail().toLowerCase(Locale.ROOT)));
                 return builder.compact();
             } else {
                 throw new TimeMappingExceptions("Username or password not found.");
@@ -58,7 +59,7 @@ public class TimeMappingControllerPublic {
     }
 
     public Boolean validate(Login login) {
-        String encodedPassword = timeMappingRepository.requestPassword(login.getEmail());
+        String encodedPassword = timeMappingRepository.requestPassword(login.getEmail().toLowerCase(Locale.ROOT));
         return passwordEncoder.matches(login.getPassword(), encodedPassword);
     }
 

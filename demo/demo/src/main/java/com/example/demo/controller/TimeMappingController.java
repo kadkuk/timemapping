@@ -38,21 +38,35 @@ public class TimeMappingController {
 
     @GetMapping("time/data/activity")
     public List<DataSingleActivity> activitySummary(
-            @RequestParam("activityName") String activityName,
+            @RequestParam("activityId") int activityId,
             @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startTime,
             @RequestParam("stopTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate stopTime,
             Authentication authentication) {
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        return timeMappingService.dataSingleActivity(activityName, userDetails.getId(), startTime, stopTime);
+        return timeMappingService.dataSingleActivity(activityId, userDetails.getId(), startTime, stopTime);
     }
 
     @GetMapping("time/data/project")
     public List<DataProject> projectSummary(
-            @RequestParam("projectName") String projectName,
+            @RequestParam("projectId") int projectId,
             @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startTime,
             @RequestParam("stopTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate stopTime,
             Authentication authentication) {
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        return timeMappingService.dataProject(projectName, userDetails.getId(), startTime, stopTime);
+        return timeMappingService.dataProject(projectId, userDetails.getId(), startTime, stopTime);
+    }
+
+    @GetMapping("time/data/activitieslist")
+    public List<ListActivities> activitiesList(
+            Authentication authentication) {
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        return timeMappingService.listActivities(userDetails.getId());
+    }
+
+    @GetMapping("time/data/projectslist")
+    public List<ListProject> projectList(
+            Authentication authentication) {
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        return timeMappingService.listProject(userDetails.getId());
     }
 }
