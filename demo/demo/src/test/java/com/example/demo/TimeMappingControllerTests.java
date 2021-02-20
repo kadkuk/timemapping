@@ -28,10 +28,10 @@ public class TimeMappingControllerTests {
     void createUserTest() throws Exception  {
         ObjectMapper mapper = new ObjectMapper();
         TimeMappingUser user = new TimeMappingUser();
-        user.setFirstName("Jaan");
-        user.setLastName("Kreem");
-        user.setEmail("jaan@kreem.ee");
-        user.setPassword("martsipan");
+        user.setFirstName("JaaK");
+        user.setLastName("Harakas");
+        user.setEmail("harakas@ttu.ee");
+        user.setPassword("jaakharakas");
         http://localhost:8080/public/createuser
         mockMvc.perform(MockMvcRequestBuilders.post("/public/createuser").contentType("application/Json")
                 .content(mapper.writeValueAsString(user))
@@ -42,8 +42,8 @@ public class TimeMappingControllerTests {
     void LoginTest() throws Exception  {
         ObjectMapper mapper = new ObjectMapper();
         Login login = new Login();
-        login.setEmail("toots@gmail.com");
-        login.setPassword("antstoots");
+        login.setEmail("kadri_kukk@outlook.com");
+        login.setPassword("pirukas");
         http://localhost:8080/public/login
         mockMvc.perform(MockMvcRequestBuilders.post("/public/login").contentType("application/Json")
                 .content(mapper.writeValueAsString(login))
@@ -55,7 +55,7 @@ public class TimeMappingControllerTests {
     void createProjectTest() throws Exception  {
         ObjectMapper mapper = new ObjectMapper();
         TimeMappingProject project = new TimeMappingProject();
-        project.setProjectName("Painting");
+        project.setProjectName("Travelling");
         http://localhost:8080/time/createproject
         mockMvc.perform(MockMvcRequestBuilders.post("/time/createproject").contentType("application/Json")
                 .content(mapper.writeValueAsString(project))
@@ -67,8 +67,8 @@ public class TimeMappingControllerTests {
     void createProjectActivityTest() throws Exception  {
         ObjectMapper mapper = new ObjectMapper();
         TimeMappingActivity timeMappingActivity = new TimeMappingActivity();
-        timeMappingActivity.setProjectName("painting");
-        timeMappingActivity.setActivityName("skiing");
+        timeMappingActivity.setProjectName("home");
+        timeMappingActivity.setActivityName("washing");
         timeMappingActivity.setActivityHourlyRate(BigDecimal.valueOf(23.55));
         http://localhost:8080/time/createactivity
         mockMvc.perform(MockMvcRequestBuilders.post("/time/createactivity").contentType("application/Json")
@@ -81,7 +81,7 @@ public class TimeMappingControllerTests {
     void createSingleActivityTest() throws Exception  {
         ObjectMapper mapper = new ObjectMapper();
         TimeMappingActivity timeMappingActivity = new TimeMappingActivity();
-        timeMappingActivity.setActivityName("consulting");
+        timeMappingActivity.setActivityName("reading");
         timeMappingActivity.setActivityHourlyRate(BigDecimal.valueOf(99.55));
         http://localhost:8080/time/createactivity
         mockMvc.perform(MockMvcRequestBuilders.post("/time/createactivity").contentType("application/Json")
@@ -94,8 +94,8 @@ public class TimeMappingControllerTests {
     void toggleProjectActivityTest() throws Exception  {
         ObjectMapper mapper = new ObjectMapper();
         TimeMappingLog timeMappingLog = new TimeMappingLog();
-        timeMappingLog.setProjectName("painting");
-        timeMappingLog.setActivityName("drawing");
+        timeMappingLog.setProjectName("home");
+        timeMappingLog.setActivityName("sleeping");
         http://localhost:8080/time/toggleactivity
         mockMvc.perform(MockMvcRequestBuilders.put("/time/toggleactivity").contentType("application/Json")
                 .content(mapper.writeValueAsString(timeMappingLog))
@@ -107,7 +107,7 @@ public class TimeMappingControllerTests {
     void toggleSingleActivityTest() throws Exception  {
         ObjectMapper mapper = new ObjectMapper();
         TimeMappingLog timeMappingLog = new TimeMappingLog();
-        timeMappingLog.setActivityName("reading");
+        timeMappingLog.setActivityName("babycare");
         http://localhost:8080/time/toggleactivity
         mockMvc.perform(MockMvcRequestBuilders.put("/time/toggleactivity").contentType("application/Json")
                 .content(mapper.writeValueAsString(timeMappingLog))
@@ -120,7 +120,7 @@ public class TimeMappingControllerTests {
         ObjectMapper mapper = new ObjectMapper();
         DataSingleActivity dataSingleActivity = new DataSingleActivity();
         http://localhost:8080/time/data/activity
-        mockMvc.perform(MockMvcRequestBuilders.get("/time/data/activity?activityName=reading&startTime=2021-02-11&stopTime=2021-02-17").contentType("application/Json")
+        mockMvc.perform(MockMvcRequestBuilders.get("/time/data/activity?activityName=babycare&startTime=2021-02-17&stopTime=2021-02-19").contentType("application/Json")
                 .content(mapper.writeValueAsString(dataSingleActivity))
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -131,7 +131,7 @@ public class TimeMappingControllerTests {
         ObjectMapper mapper = new ObjectMapper();
         DataProject dataProject = new DataProject();
         http://localhost:8080/time/data/project
-        mockMvc.perform(MockMvcRequestBuilders.get("/time/data/project?projectName=painting&startTime=2021-02-11&stopTime=2021-02-17").contentType("application/Json")
+        mockMvc.perform(MockMvcRequestBuilders.get("/time/data/project?projectName=sports&startTime=2021-02-11&stopTime=2021-02-20").contentType("application/Json")
                 .content(mapper.writeValueAsString(dataProject))
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }

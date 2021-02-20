@@ -20,7 +20,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/public/**").permitAll()
+                .antMatchers("/", "/css/**", "/js/**", "/favicon.ico","/img/**", "/public/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtTokenFiler(), UsernamePasswordAuthenticationFilter.class);

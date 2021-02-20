@@ -2,6 +2,8 @@ package com.example.demo.repository;
 
 import com.example.demo.javaClasses.DataProject;
 import com.example.demo.javaClasses.DataSingleActivity;
+import com.example.demo.javaClasses.ListActivities;
+import com.example.demo.javaClasses.ListProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -131,14 +133,14 @@ public class TimeMappingRepository {
         jdbcTemplate.update(sql15, paramap15);
     }
 
-    public List<DataSingleActivity> dataSingleActivity(String activityName, int userId, LocalDate startTime, LocalDate stopTime) {
+    public List<DataSingleActivity> dataSingleActivity(int activityId, int userId, LocalDate startTime, LocalDate stopTime) {
         String sql16 = "SELECT activity.activity_name, round(cast(SUM(EXTRACT(epoch from (time_log.elapsed_time)))/60/60 AS numeric),2) AS hours_spent, " +
                 "round(cast((SUM(EXTRACT(epoch from (time_log.elapsed_time)))/60/60)*activity.activity_hourly_rate AS numeric), 2) AS cost " +
-                "FROM activity, time_log WHERE activity.activity_id = time_log.activity_id AND activity.activity_name= :nameParam AND user_id = :idParam AND " +
+                "FROM activity, time_log WHERE activity.activity_id = time_log.activity_id AND activity.activity_id= :accParam AND user_id = :idParam AND " +
                 "Date(time_log.start_time) >= :startParam AND Date(time_log.stop_time) <= :stopParam AND project_id IS NULL " +
                 "GROUP BY activity_name, activity_hourly_rate";
         HashMap<String, Object> paraMap16 = new HashMap<>();
-        paraMap16.put("nameParam", activityName);
+        paraMap16.put("accParam", activityId);
         paraMap16.put("idParam", userId);
         paraMap16.put("startParam", startTime);
         paraMap16.put("stopParam", stopTime);
@@ -146,23 +148,42 @@ public class TimeMappingRepository {
         return result;
     }
 
-    public List<DataProject> dataProject(String projectName, int userId, LocalDate startTime, LocalDate stopTime) {
+    public List<DataProject> dataProject(int projectId, int userId, LocalDate startTime, LocalDate stopTime) {
         String sql19 = "SELECT project.project_name, user_data.last_name, activity.activity_name, " +
                 "round(cast(SUM(EXTRACT(epoch from (time_log.elapsed_time)))/60/60 AS numeric),2) AS hours_spent, " +
                 "round(cast((SUM(EXTRACT(epoch from (time_log.elapsed_time)))/60/60)*activity.activity_hourly_rate AS numeric), 2) AS cost " +
                 "FROM project, activity, user_data, time_log WHERE time_log.activity_id = activity.activity_id AND " +
                 "activity.project_id=project.project_id AND activity.user_id=user_data.user_id AND " +
-                "project.project_name= :nameParam AND project.user_id= :idParam AND Date(time_log.start_time) >= :startParam AND " +
+                "project.project_id= :projParam AND project.user_id= :idParam AND Date(time_log.start_time) >= :startParam AND " +
                 "Date(time_log.stop_time) <= :stopParam GROUP BY project_name, last_name, activity_name, activity_hourly_rate";
         HashMap<String, Object> paraMap19 = new HashMap<>();
-        paraMap19.put("nameParam", projectName);
+        paraMap19.put("projParam", projectId);
         paraMap19.put("idParam", userId);
         paraMap19.put("startParam", startTime);
         paraMap19.put("stopParam", stopTime);
         List<DataProject> result = jdbcTemplate.query(sql19, paraMap19, new DataProjectRowMapper());
         return result;
-
     }
+
+    public List<ListActivities> listActivities(int userId) {
+        String sql20 = "SELECT activity_id, activity_name FROM activity WHERE user_id = :idParam AND " +
+                "project_id IS NULL AND activity_id IN (SELECT activity_id FROM time_log)";
+        HashMap<String, Object> paraMap20 = new HashMap<>();
+        paraMap20.put("idParam", userId);
+        List<ListActivities> result = jdbcTemplate.query(sql20, paraMap20, new ListActivitiesRowMapper());
+        return result;
+    }
+
+    public List<ListProject> listProject(int userId) {
+        String sql21 = "SELECT project.project_id, project.project_name FROM project, activity WHERE " +
+                "project.project_id = activity.project_id AND project.user_id = :idParam AND " +
+                "activity_id IN (SELECT activity_id FROM time_log)";
+        HashMap<String, Object> paraMap21 = new HashMap<>();
+        paraMap21.put("idParam", userId);
+        List<ListProject> result = jdbcTemplate.query(sql21, paraMap21, new ListProjectRowMapper());
+        return result;
+    }
+
 
     private class DataSingleActivityRowMapper implements RowMapper<DataSingleActivity> {
         @Override
@@ -185,6 +206,26 @@ public class TimeMappingRepository {
             dataProject.setHours(resultSet.getDouble("hours_spent"));
             dataProject.setCost(resultSet.getBigDecimal("cost"));
             return dataProject;
+        }
+    }
+
+    private class ListActivitiesRowMapper implements RowMapper<ListActivities> {
+        @Override
+        public ListActivities mapRow(ResultSet resultSet, int i) throws SQLException {
+            ListActivities listActivities = new ListActivities();
+            listActivities.setActivityId(resultSet.getInt("activity_id"));
+            listActivities.setActivityName(resultSet.getString("activity_name"));
+            return listActivities;
+        }
+    }
+
+    private class ListProjectRowMapper implements RowMapper<ListProject> {
+        @Override
+        public ListProject mapRow(ResultSet resultSet, int i) throws SQLException {
+            ListProject listProject = new ListProject();
+            listProject.setProjectId(resultSet.getInt("project_id"));
+            listProject.setProjectName(resultSet.getString("project_name"));
+            return listProject;
         }
     }
 }

@@ -32,7 +32,7 @@ public class TimeMappingService {
             if (user.getEmail().equals("") && user.getPassword().equals("")) {
                 throw new TimeMappingExceptions("Email and password cannot be empty");
             } else {
-                timeMappingRepository.createUser(user.getFirstName(), user.getLastName(), user.getEmail(),
+                timeMappingRepository.createUser(user.getFirstName(), user.getLastName(), user.getEmail().toLowerCase(Locale.ROOT),
                         passwordEncoder.encode(user.getPassword()));
                 return "User created!";
             }
@@ -121,25 +121,43 @@ public class TimeMappingService {
         }
     }
 
-    public List<DataSingleActivity> dataSingleActivity(String activityName,
+    public List<DataSingleActivity> dataSingleActivity(int activityId,
                                                        int userId,
                                                        LocalDate startTime,
                                                        LocalDate stopTime) {
-        List<DataSingleActivity> newList = timeMappingRepository.dataSingleActivity(activityName.toLowerCase(Locale.ROOT),
+        List<DataSingleActivity> newList = timeMappingRepository.dataSingleActivity(activityId,
                 userId, startTime, stopTime);
         if (newList.isEmpty()) {
             throw new TimeMappingExceptions("Data not found.");
         } else {
-            return timeMappingRepository.dataSingleActivity(activityName.toLowerCase(Locale.ROOT), userId, startTime, stopTime);
+            return timeMappingRepository.dataSingleActivity(activityId, userId, startTime, stopTime);
         }
     }
 
-    public List<DataProject> dataProject(String projectName, int userId, LocalDate startTime, LocalDate stopTime) {
-        List<DataProject> newList = timeMappingRepository.dataProject(projectName.toLowerCase(Locale.ROOT), userId, startTime, stopTime);
+    public List<DataProject> dataProject(int projectId, int userId, LocalDate startTime, LocalDate stopTime) {
+        List<DataProject> newList = timeMappingRepository.dataProject(projectId, userId, startTime, stopTime);
         if (newList.isEmpty()) {
             throw new TimeMappingExceptions("Data not found.");
         } else {
-            return timeMappingRepository.dataProject(projectName.toLowerCase(Locale.ROOT), userId, startTime, stopTime);
+            return timeMappingRepository.dataProject(projectId, userId, startTime, stopTime);
+        }
+    }
+
+    public List<ListActivities> listActivities(int userId) {
+        List<ListActivities> newList = timeMappingRepository.listActivities(userId);
+        if (newList.isEmpty()) {
+            throw new TimeMappingExceptions("No activities found.");
+        } else {
+            return timeMappingRepository.listActivities(userId);
+        }
+    }
+
+    public List<ListProject> listProject(int userId) {
+        List<ListProject> newList = timeMappingRepository.listProject(userId);
+        if (newList.isEmpty()) {
+            throw new TimeMappingExceptions("No projects found.");
+        } else {
+            return timeMappingRepository.listProject(userId);
         }
     }
 }
