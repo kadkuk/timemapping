@@ -9,6 +9,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,23 +39,27 @@ public class TimeMappingControllerPublic {
     //http://localhost:8080/public/login
     @PostMapping("/public/login")
     public String login(@RequestBody Login login) {
-        if (login.getEmail().equals("") && login.getPassword().equals("")) {
-            throw new TimeMappingExceptions("Please enter your login name and password.");
-        } else {
-            if (validate(login)) {
-                Date now = new Date();
-                Date expired = new Date(now.getTime() + 1000 * 60 * 60 * 24); //token valid 24h
-                JwtBuilder builder = Jwts.builder()
-                        .setExpiration(expired)
-                        .setIssuedAt(new Date())
-                        .setIssuer("vali-it")
-                        .signWith(SignatureAlgorithm.HS256, "c2VjcmV0")
-                        .claim("userName", login.getEmail().toLowerCase(Locale.ROOT))
-                        .claim("userId", timeMappingRepository.getUserId(login.getEmail().toLowerCase(Locale.ROOT)));
-                return builder.compact();
+        try {
+            if (login.getEmail().equals("") && login.getPassword().equals("")) {
+                throw new TimeMappingExceptions("Please enter your login name and password.");
             } else {
-                throw new TimeMappingExceptions("Username or password not found.");
+                if (validate(login)) {
+                    Date now = new Date();
+                    Date expired = new Date(now.getTime() + 1000 * 60 * 60 * 24); //token valid 24h
+                    JwtBuilder builder = Jwts.builder()
+                            .setExpiration(expired)
+                            .setIssuedAt(new Date())
+                            .setIssuer("vali-it")
+                            .signWith(SignatureAlgorithm.HS256, "c2VjcmV0")
+                            .claim("userName", login.getEmail().toLowerCase(Locale.ROOT))
+                            .claim("userId", timeMappingRepository.getUserId(login.getEmail().toLowerCase(Locale.ROOT)));
+                    return builder.compact();
+                } else {
+                    throw new TimeMappingExceptions("Wrong credentials.");
+                }
             }
+        } catch (EmptyResultDataAccessException e) {
+            throw new TimeMappingExceptions("Username or password not found.");
         }
     }
 

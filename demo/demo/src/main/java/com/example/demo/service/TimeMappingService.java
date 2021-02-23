@@ -29,7 +29,8 @@ public class TimeMappingService {
     @Transactional
     public String createUser(TimeMappingUser user) {
         try {
-            if (user.getEmail().equals("") && user.getPassword().equals("")) {
+            if (user.getEmail().equals("") && user.getPassword().equals("") || user.getEmail() == null
+                    || user.getPassword() == null) {
                 throw new TimeMappingExceptions("Email and password cannot be empty");
             } else {
                 timeMappingRepository.createUser(user.getFirstName(), user.getLastName(), user.getEmail().toLowerCase(Locale.ROOT),
@@ -38,6 +39,8 @@ public class TimeMappingService {
             }
         } catch (DuplicateKeyException e) {
             throw new TimeMappingExceptions("User with this email already exists.");
+        } catch (EmptyResultDataAccessException e){
+            throw new TimeMappingExceptions("Email and password cannot be empty.");
         } catch (DataIntegrityViolationException e) {
             throw new TimeMappingExceptions("Email cannot be empty");
         } catch (IllegalArgumentException e) {
